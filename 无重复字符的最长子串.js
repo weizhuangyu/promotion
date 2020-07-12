@@ -37,27 +37,27 @@ var lengthOfLongestSubstring = function(s) {
 }
 
 // 滑动窗口解法
-const lengthOfLongestSubstring = function (s) {
-	const length = s.length
+var lengthOfLongestSubstring = function(s) {
+	let index = 0
+	let start = 0
+	let max = 0
 	const map = new Map()
-	let j = 0, ans = 0, start = 0
-	while(j < length) {
-		const key = s.charAt(j)
-		if (!map.has(key)) {
-			map.set(key, j)
-			ans = Math.max(map.size, ans)
+	while (index < s.length) {
+		const value = s.charAt(index)
+		if (!map.has(value)) {
+			map.set(value, index)
+			max = Math.max(map.size, max)
 		} else {
-			const end = map.get(key) + 1
-			const splits = s.slice(start, end)
-			start = end
-			for (let k = 0, len = splits.length; k < len; k++) {
-				map.delete(splits[k])
+			const oldIndex = map.get(value) + 1
+			for (let i = start; i < oldIndex; i++) {
+				map.delete(s.charAt(i))
 			}
-			map.set(key, j)
+			start = oldIndex
+			map.set(value, index)
 		}
-		j++
+		index++
 	}
-	return ans
-}
+	return max
+};
 
 console.log(lengthOfLongestSubstring('pwwkew'))
