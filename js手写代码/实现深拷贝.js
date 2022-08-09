@@ -111,3 +111,18 @@ var a = {
 a.b = a
 
 console.log(clone(a))
+
+
+// 深拷贝简化版
+function cloneDeep(obj) {
+	if (typeof obj !== 'object') {
+		return obj
+	}
+	const newObj = Array.isArray(obj) ? [] : {};
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			newObj[key] = typeof obj[key] === 'object' ? cloneDeep(obj[key]) : obj[key];
+		}
+	}
+	return newObj;
+}

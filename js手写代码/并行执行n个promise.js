@@ -2,33 +2,52 @@
  * 写一个方法，同时最多并行运行n个promise, 多余的会等待前面的执行完后再执行
  */
 
-function runTask(promiseArray) {
-	const task = promiseArray.shift()
-	if (task) {
-		task().then((result) => {
-			console.log(result)
-			runTask(promiseArray)
+function handleFetchQueue(promises, max, callback) {
+	let count = 0;
+	const resultList = [];
+	let promiseCount = 0;
+
+	function handleFetch(promise, cnt) {
+		promiseCount += 1;
+
+		if (promiseCount < max) {
+			count += 1;
+			handleFetch(promises[count], count);
+		}
+
+		promise.then((result) => {
+			resultList[cnt] = result;
+
+			if (count < promises.length - 1) {
+				promiseCount -= 1;
+				count += 1;
+				handleFetch(promises[count], count);
+			}
+			const resultLists = resultList.filter((item) => item !== undefined);
+			if (resultLists.length === promises.length) {
+				callback && callback(resultList);
+			}
 		})
 	}
+
+	handleFetch(promises[count], count);
 }
 
-function run (promiseArray, n) {
-	let runLength = 0
-	while (runLength < n && promiseArray.length) {
-		runLength++
-		runTask(promiseArray)
-	}
-}
 
-const promiseArray = []
-for (let i = 0; i < 10; i++) {
-	promiseArray.push(
-		() => new Promise((resolve) => {
-			setTimeout(() => {
-				resolve(i)
-			}, 1000 * i)
-		})
-	)
-}
+const urls = Array.from({length: 10}, (v, k) => k);
 
-run(promiseArray, 5)
+const fetch = function (idx) {
+	return new Promise(resolve => {
+		const timeout = parseInt(Math.random() * 1e4);
+		setTimeout(() => {
+			console.log(`end request ${idx}`);
+			resolve(idx)
+		}, timeout)
+	})
+};
+
+const callback = (results) => {
+	console.log('run callback', results);
+};
+
+handleFetchQueue(urls.map((url) => fetch(url)), 4, callback);

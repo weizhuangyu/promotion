@@ -23,5 +23,5 @@ const multiply = (x , y) => x * y
 
 const pow = (x) => x * x
 const function1 = composeFunction(pow, add, multiply)
-console.log(function1(3, 4)) // 输出结果13
+console.log(function1(3, 4)) // 输出结果169
 
