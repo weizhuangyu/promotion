@@ -1,5 +1,5 @@
 /**
- 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+ 给定一个字符串s，找到s中最长的回文子串。你可以假设s的最大长度为1000。
 
 示例 1：
 
@@ -12,42 +12,46 @@
 输出: "bb"
  */
 
+function longestLength(s, left, right) {
+	let result = ''
+	if (left < 0 || right > s.length) {
+		return result
+	}
+	while (left >= 0 && right < s.length) {
+		if (s.charAt(left) !== s.charAt(right)) {
+			result = s.substring(left + 1, right)
+			break
+		}
+		left--
+		right++
+	}
+
+	if (left < 0 && right < s.length) {
+		result = s.substring(0, right)
+	}
+	if (right >= s.length && left >= 0) {
+		result = s.substring(left + 1, s.length)
+	}
+	if (left < 0 && right >= s.length) {
+		result = s.substring(0, s.length)
+	}
+	return result
+}
+
 /**
  * @param {string} s
  * @return {string}
  */
 const longestPalindrome = function(s) {
-	const length = s.length
-	const dp = []
-	let maxLength = 0
-	let beginPoi = 0
-	for (let i = 0; i < length; i++) {
-		if (!dp[i]) dp[i] = []
-		dp[i][i] = true
+	let maxString = ''
+	for (let i = 0; i < s.length; i++) {
+		const result1 = longestLength(s, i, i)
+		const result2 = longestLength(s, i, i + 1)
+		const maxTwoString = result1.length >= result2.length ? result1 : result2
+		maxString = maxTwoString.length >= maxString.length ? maxTwoString : maxString
 	}
-	if (length < 2) {
-		return s
-	}
-	for (let i = 1; i < length; i++) {
-		for (let j = 0; j < i; j++) {
-			if (s.charAt(i) !== s.charAt(j)) {
-				dp[i][j] = false
-			} else {
-				if (i - j < 3) {
-					dp[i][j] = true
-				} else {
-					dp[i][j] = dp[i - 1][j + 1]
-				}
-			}
+	return maxString
+};
 
-			if(dp[i][j] && i - j + 1 > maxLength) {
-				maxLength = i - j + 1
-				beginPoi = j
-			}
-		}
-	}
-	return s.substring(beginPoi, maxLength + beginPoi)
-}
-
-console.log(longestPalindrome('aadsdsa'))
+console.log(longestPalindrome('abbab'))
 
