@@ -5,7 +5,7 @@
  * 输出: [[1,6],[8,10],[15,18]]
  * 解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
  *
- * 示例 2:
+ * 示例2:
  * 输入: [[1,4],[4,5]]
  * 输出: [[1,5]]
  * 解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。
@@ -16,24 +16,20 @@
  * @return {number[][]}
  */
 var merge = function(intervals) {
-	intervals = intervals.sort((a, b) => a[0] - b[0])
-	let results = []
+	intervals = intervals.sort((a, b) => a[0] - b[0]);
 	if (intervals.length === 1) {
-		return intervals
+		return intervals;
 	}
-	for (let i = 0, length = intervals.length; i < length - 1; i++) {
-		const current = intervals[i]
-		let next = intervals[i + 1]
-		if (current[1] >= next[0]) {
-			intervals[i + 1] = [current[0], Math.max(current[1], next[1])]
-		} else {
-			results.push(intervals[i])
+
+	return intervals.reduce((pre, next) => {
+		if (!pre[pre.length - 1] || pre[pre.length - 1][1] < next[0]) {
+			pre.push(next)
 		}
-		if (i === length - 2) {
-			results.push(intervals[i + 1])
+		if (pre[pre.length - 1][1] >= next[0]) {
+			pre[pre.length - 1] = [pre[pre.length - 1][0], Math.max(pre[pre.length - 1][1], next[1])]
 		}
-	}
-	return results
+		return pre;
+	}, []);
 }
 
-console.log(merge([[1,4],[4,5]]))
+console.log(merge([[1,3],[5,7],[4,6]]))

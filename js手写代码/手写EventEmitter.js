@@ -4,9 +4,6 @@
 // 	}
 // 	on(type, listener, isUnshift) {
 // 		// 因为其他的类可能继承自EventEmitter，子类的events可能为空，保证子类必须存在此实例属性
-// 		if(!this.events) {
-// 			this.events = {};
-// 		}
 // 		if(this.events[type]) {
 // 			if(isUnshift) {
 // 				this.events[type].unshift(listener);
@@ -88,10 +85,19 @@ event.on('say',function(str) {
 	console.log(str);
 });
 
+const say1 = (str) => {
+	console.log(str);
+}
+
+event.on('say1', say1);
+
+event.off('say1', say1);
+
 event.once('say', function(str) {
-	console.log('这是once:' + str)
+	console.log('这是once1:' + str)
 })
 
 event.emit('say','visa');
+event.emit('say1','visa111');
 event.emit('say','visa222');
 event.emit('say','visa333');

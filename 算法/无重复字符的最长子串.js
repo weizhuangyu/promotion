@@ -1,7 +1,7 @@
 /**
  * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
 
-	示例 1:
+	示例:
 
 	输入: "abcabcbb"
 	输出: 3
@@ -60,29 +60,30 @@
 // 	return ans
 // }
 
+	// 已复习，滑动窗口
 const lengthOfLongestSubstring = (str) => {
 	const length = str.length;
 	const map = new Map();
 
-	let ans = 0;
 	let i = 0;
-	let start = 0;
-	while (i < length) {
+	let max = 0;
+	let start = 0
+	while (i < length - 1) {
 		if (!map.has(str[i])) {
 			map.set(str[i], i);
-			ans = Math.max(map.size, ans);
+			max = Math.max(map.size, max);
 		} else {
 			const end = map.get(str[i]) + 1;
-			const deleteStr = str.slice(start, end);
-			for (let k = 0, len = deleteStr.length; k < len; k++) {
-				map.delete(deleteStr[k]);
-			}
+			const deleteContent = str.slice(start, end);
 			start = end;
+			for (let j = 0; j < deleteContent.length; j++) {
+				map.delete(deleteContent[j])
+			}
 			map.set(str[i], i);
 		}
 		i++;
 	}
-	return ans;
+	return max;
 }
 
-console.log(lengthOfLongestSubstring('pweawkew'))
+console.log(lengthOfLongestSubstring('pwewawfwrkew'))

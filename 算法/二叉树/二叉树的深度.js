@@ -28,38 +28,42 @@ function TreeNode(val) {
 }
 
 // 广度优先算法
-var maxDepth = function(root) {
-	const queue = [ root ]
-	let depth = 0
-	while (queue.length) {
-		let length = queue.length
-		let flag = true
-		while (length) {
-			const node = queue.shift()
-			if (node && (node.val || node.val === 0)) {
-				if (flag) {
-					flag = false
-					depth++
-				}
-				node.left && (queue.push(node.left))
-				node.right && (queue.push(node.right))
-			}
-			length--
-		}
-	}
-	return depth
-};
+// var maxDepth = function(root) {
+// 	const queue = [ root ]
+// 	let depth = 0
+// 	while (queue.length) {
+// 		let length = queue.length
+// 		let flag = true
+// 		while (length) {
+// 			const node = queue.shift()
+// 			if (node && (node.val || node.val === 0)) {
+// 				if (flag) {
+// 					flag = false
+// 					depth++
+// 				}
+// 				node.left && (queue.push(node.left))
+// 				node.right && (queue.push(node.right))
+// 			}
+// 			length--
+// 		}
+// 	}
+// 	return depth
+// };
 
 var maxDepth = function (root) {
-	function depth(node) {
+	let maxLen = 0;
+	function depth(node, dep) {
 		if (!node) {
-			return 0
+			return 0;
 		}
-		const left = depth(node.left)
-		const right = depth(node.right)
-		return Math.max(left, right) + 1
+
+		maxLen = Math.max(maxLen, dep + 1);
+		depth(node.left, dep + 1);
+		depth(node.right, dep + 1);
 	}
-	return depth(root)
+	depth(root, 0);
+
+	return maxLen;
 }
 
 var v1 = new TreeNode(3)
