@@ -21,35 +21,59 @@
 // 	return quickSort(leftArray).concat(sortNum, quickSort(rightArray))
 // }
 
-function swap(array, i, j) {
-	const temp = array[j]
-	array[j] = array[i]
-	array[i] = temp
-}
+// function swap(array, i, j) {
+// 	const temp = array[j]
+// 	array[j] = array[i]
+// 	array[i] = temp
+// }
+//
+// function quickSort(array) {
+// 	function sort(array, i, j) {
+// 		const standard = array[j]
+// 		const lastIndex = j
+// 		j--
+// 		while (i !== j) {
+// 			while (i < j && array[i] < standard) i++
+// 			while (i < j && array[j] > standard) j--
+// 			swap(array, i, j)
+// 		}
+// 		if (array[j] > array[lastIndex]){
+// 			swap(array, lastIndex, j)
+// 		}
+// 		if (j > 0) {
+// 			sort(array, 0, j)
+// 		}
+// 		if (j + 1 < lastIndex) {
+// 			sort(array, j + 1, lastIndex)
+// 		}
+// 	}
+// 	sort(array, 0, array.length - 1)
+// 	return array
+// }
+// console.log(quickSort([1,2,1,3]))
 
 function quickSort(array) {
-	function sort(array, i, j) {
-		const standard = array[j]
-		const lastIndex = j
-		j--
-		while (i !== j) {
-			while (i < j && array[i] < standard) i++
-			while (i < j && array[j] > standard) j--
-			swap(array, i, j)
-		}
-		if (array[j] > array[lastIndex]){
-			swap(array, lastIndex, j)
-		}
-		if (j > 0) {
-			sort(array, 0, j)
-		}
-		if (j + 1 < lastIndex) {
-			sort(array, j + 1, lastIndex)
+	const length = array.length;
+
+	if (length <= 1) {
+		return array;
+	}
+
+	const leftSort = [];
+	const rightSort = [];
+	const middleNum = Math.floor(length / 2);
+	const sortValue = array.splice(middleNum, 1)[0];
+
+	for (let i = 0; i < length - 1; i++) {
+		if (array[i] <= sortValue) {
+			leftSort.push(array[i]);
+		} else {
+			rightSort.push(array[i])
 		}
 	}
-	sort(array, 0, array.length - 1)
-	return array
+
+	return quickSort(leftSort).concat(sortValue, quickSort(rightSort));
+
 }
-// console.log(quickSort([1,2,1,3]))
 
 console.log(quickSort([2,1,4,9,0]))

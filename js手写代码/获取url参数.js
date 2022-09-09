@@ -25,8 +25,9 @@ function getUrlQuery(url) {
 			} else {
 				paramsObj[key] = val;
 			}
-	} else { // value
-		paramsObj[param] = true; }
+		} else { // value
+			paramsObj[param] = true;
+		}
 	})
 	return paramsObj;
 }

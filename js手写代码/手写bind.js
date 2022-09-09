@@ -6,8 +6,8 @@ if (!Function.prototype.bind) {
 		const fToBind = this
 		const fNOP = function () {}
 		const fBound = function (...args) {
-				return fToBind.apply(this instanceof fNOP ? this : oThis, aArgs.concat(args));
-			}
+			return fToBind.apply(this instanceof fNOP ? this : oThis, aArgs.concat(args));
+		}
 		if (this.prototype) {
 			fNOP.prototype = this.prototype
 		}
@@ -15,3 +15,5 @@ if (!Function.prototype.bind) {
 		return fBound
 	}
 }
+
+

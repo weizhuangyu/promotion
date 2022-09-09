@@ -5,23 +5,36 @@
 
 function addDot(num) {
 	const rest = parseInt(num / 1000);
-	const remain = ('000' + num % 1000).slice(-3);
-	if (rest >= 1000 || rest <= -1000) {
+	const remain = num % 1000 < 100 ? ('000' + num % 1000).slice(-3) : num % 1000;
+	if (rest >= 1000) {
 		return addDot(rest) + ',' + remain;
 	} else if (rest === 0) {
-		return remain
+		return parseInt(remain);
 	} else {
 		return rest + ',' + remain;
 	}
 }
 
 function insertComma(num) {
-	const reg = /(-?\d+)(\.\d*)?/;
+	const reg = /(-?)(\d+)(\.\d*)?/;
 	const strArr = String(num).match(reg)
-	const intNum = strArr[1];
-	const decimalNum = strArr[2];
+	const first = strArr[1];
+	const intNum = strArr[2];
+	const decimalNum = strArr[3];
 
-	return addDot(intNum) + decimalNum;
+	return first + addDot(intNum) + decimalNum;
 }
 
-console.log(insertComma(-123456789.3423))
+console.log(insertComma(-10.3423))
+
+// 方法2 正则
+// 金额转千分位
+const formatPrice = (number) => {
+	number = '' + number
+
+	const [ integer, decimal = '' ] = number.split('.')
+
+	return integer.replace(/\B(?=(\d{3})+$)/g, ',') + (decimal ? '.' + decimal : '')
+}
+
+console.log(formatPrice(-789.3343));
