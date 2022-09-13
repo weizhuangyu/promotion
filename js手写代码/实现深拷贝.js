@@ -1,5 +1,3 @@
-// https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1
-
 const arrayTag = '[object Array]'
 const objectTag = '[object Object]'
 const boolTag = '[object Boolean]'
@@ -10,15 +8,6 @@ const symbolTag = '[object Symbol]'
 const errorTag = '[object Error]'
 const regexpTag = '[object RegExp]'
 const funcTag = '[object Function]'
-
-function forEach(array, iteratee) {
-	let index = -1
-	const length = array.length
-	while (++index < length) {
-		iteratee(array[index], index)
-	}
-	return array
-}
 
 function getType(target) {
 	return Object.prototype.toString.call(target)
@@ -94,35 +83,36 @@ function clone(target, map = new WeakMap()) {
 	map.set(target, cloneTarget)
 
 	// 克隆对象和数组
-	const keys = type === arrayTag ? undefined : Object.keys(target)
-	forEach(keys || target, (value, key) => {
-		if (keys) {
-			key = value
+	cloneTarget = Array.isArray(target) ? [] : {};
+	for (let key in target) {
+		if (target.hasOwnProperty(key)) {
+			cloneTarget[key] = typeof target[key] === 'object' ? clone(target[key]) : target[key];
 		}
-		cloneTarget[key] = clone(target[key], map)
-	})
+	}
+	return cloneTarget;
 
-	return cloneTarget
 }
 
 var a = {
-	a: 10
+	a: 10,
+	b: {
+		a: 20
+	}
 }
-a.b = a
 
 console.log(clone(a))
 
 
-// 深拷贝简化版
-function cloneDeep(obj) {
-	if (typeof obj !== 'object') {
-		return obj
-	}
-	const newObj = Array.isArray(obj) ? [] : {};
-	for (let key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			newObj[key] = typeof obj[key] === 'object' ? cloneDeep(obj[key]) : obj[key];
-		}
-	}
-	return newObj;
-}
+// // 深拷贝简化版
+// function cloneDeep(obj) {
+// 	if (typeof obj !== 'object') {
+// 		return obj
+// 	}
+// 	const newObj = Array.isArray(obj) ? [] : {};
+// 	for (let key in obj) {
+// 		if (obj.hasOwnProperty(key)) {
+// 			newObj[key] = typeof obj[key] === 'object' ? cloneDeep(obj[key]) : obj[key];
+// 		}
+// 	}
+// 	return newObj;
+// }
